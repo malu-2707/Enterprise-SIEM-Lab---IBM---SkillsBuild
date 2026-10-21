@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise SIEM Dashboard</title>
+
+<style>
+:root {
+    --red: #c95757;
+    --red-dark: #a83d45;
+    --red-light: #fff0f0;
+    --red-border: #f1d2d2;
+    --white: #ffffff;
+    --background: #fffafa;
+    --text: #352f30;
+    --muted: #817678;
+    --border: #eee3e3;
+    --shadow: 0 4px 18px rgba(130, 50, 50, 0.06);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+header {
+    background: var(--white);
+    border-bottom: 1px solid var(--red-border);
+    padding: 22px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+}
+
+.logo {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    background: var(--red-light);
+    color: var(--red-dark);
+    display: grid;
+    place-items: center;
+    font-size: 24px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 23px;
+    letter-spacing: -0.5px;
+}
+
+.subtitle {
+    color: var(--muted);
+    margin-top: 5px;
+    font-size: 13px;
+}
+
+.lab-badge {
+    background: #fff0f0;
+    color: var(--red-dark);
+    border: 1px solid var(--red-border);
+    border-radius: 20px;
+    padding: 8px 13px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+main {
+    max-width: 1450px;
+    margin: auto;
+    padding: 30px 5%;
+}
+
+.page-heading {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 22px;
+}
+
+h2 {
+    font-size: 20px;
+    margin: 0 0 7px;
+}
+
+.description {
+    color: var(--muted);
+    font-size: 13px;
+    margin: 0;
+}
+
+.status {
+    font-size: 12px;
+    color: #347653;
+    background: #eef8f0;
+    border-radius: 20px;
+    padding: 8px 12px;
+}
+
+.cards {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 28px;
+}
+
+.card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: var(--shadow);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--red-border);
+}
+
+.card.total::before,
+.card.high::before {
+    background: var(--red);
+}
+
+.card.medium::before {
+    background: #d9a24c;
+}
+
+.card.critical::before {
+    background: #8e3038;
+}
+
+.card-label {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.card-number {
+    font-size: 35px;
+    font-weight: 700;
+    margin-top: 15px;
+    color: var(--text);
+}
+
+.card-note {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 7px;
+}
+
+.panel {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow: hidden;
+}
+
+.panel-heading {
+    padding: 21px 23px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.panel-heading h2 {
+    font-size: 17px;
+    margin: 0;
+}
+
+.panel-heading p {
+    font-size: 12px;
+    color: var(--muted);
+    margin: 6px 0 0;
+}
+
+.upload-area {
+    padding: 22px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 13px;
+    background: #fffdfd;
+}
+
+input[type="file"] {
+    max-width: 100%;
+    padding: 10px;
+    border: 1px solid var(--red-border);
+    border-radius: 8px;
+    background: white;
+    color: var(--text);
+}
+
+button {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.primary-btn {
+    background: var(--red);
+    color: white;
+}
+
+.primary-btn:hover {
+    background: var(--red-dark);
+}
+
+.secondary-btn {
+    background: var(--red-light);
+    color: var(--red-dark);
+    border: 1px solid var(--red-border);
+}
+
+#message {
+    padding: 0 22px 18px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 850px;
+}
+
+th {
+    background: #fff5f5;
+    color: #7b5558;
+    text-align: left;
+    padding: 15px 18px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+td {
+    padding: 16px 18px;
+    border-bottom: 1px solid #f3ebeb;
+    font-size: 13px;
+    vertical-align: top;
+}
+
+tbody tr:hover {
+    background: #fffafa;
+}
+
+.severity {
+    display: inline-block;
+    border-radius: 20px;
+    padding: 5px 10px;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.severity.high {
+    color: #a83d45;
+    background: #ffebeb;
+}
+
+.severity.medium {
+    color: #8b611c;
+    background: #fff4dd;
+}
+
+.severity.critical {
+    color: white;
+    background: #8e3038;
+}
+
+.empty {
+    text-align: center;
+    padding: 35px;
+    color: var(--muted);
+}
+
+footer {
+    padding: 22px 5%;
+    border-top: 1px solid var(--red-border);
+    text-align: center;
+    color: var(--muted);
+    background: white;
+    font-size: 12px;
+}
+
+@media (max-width: 850px) {
+    .cards {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .cards {
+        grid-template-columns: 1fr;
+    }
+
+    main {
+        padding: 22px 4%;
+    }
+
+    h1 {
+        font-size: 19px;
+    }
+}
+</style>
+</head>
+
+<body>
+<header>
+    <div class="brand">
+        <div class="logo">🛡</div>
+        <div>
+            <h1>Enterprise SIEM</h1>
+            <div class="subtitle">Security Monitoring &amp; Alert Analysis</div>
+        </div>
+    </div>
+    <div class="lab-badge">● LOCAL SECURITY LAB</div>
+</header>
+
+<main>
+    <section class="page-heading">
+        <div>
+            <h2>Security Overview</h2>
+            <p class="description">
+                Review security alerts generated by your Python log analyzer.
+            </p>
+        </div>
+        <div class="status">● Dashboard Ready</div>
+    </section>
+
+    <section class="cards">
+        <div class="card total">
+            <div class="card-label">Total Alert Records</div>
+            <div class="card-number" id="total">0</div>
+            <div class="card-note">Imported from CSV</div>
+        </div>
+
+        <div class="card high">
+            <div class="card-label">High Severity</div>
+            <div class="card-number" id="high">0</div>
+            <div class="card-note">High-priority alerts</div>
+        </div>
+
+        <div class="card medium">
+            <div class="card-label">Medium Severity</div>
+            <div class="card-number" id="medium">0</div>
+            <div class="card-note">Medium-priority alerts</div>
+        </div>
+
+        <div class="card critical">
+            <div class="card-label">Critical Severity</div>
+            <div class="card-number" id="critical">0</div>
+            <div class="card-note">Critical-priority alerts</div>
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Import Analyzer Results</h2>
+                <p>Choose the siem_alerts.csv file generated by your Python script.</p>
+            </div>
+        </div>
+
+        <div class="upload-area">
+            <input type="file" id="csvFile" accept=".csv,text/csv">
+            <button class="primary-btn" id="loadBtn">Load Analyzer Results</button>
+            <button class="secondary-btn" id="clearBtn">Clear Results</button>
+        </div>
+
+        <div id="message" role="status" aria-live="polite">
+            No CSV loaded. Select your analyzer output to begin.
+        </div>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>Imported Security Alerts</h2>
+                <p>Alert details from the selected CSV file</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Timestamp</th>
+                        <th>Severity</th>
+                        <th>Source IP</th>
+                        <th>Username</th>
+                        <th>Rule ID</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody id="alertRows">
+                    <tr>
+                        <td colspan="6" class="empty">
+                            Import siem_alerts.csv to display alerts.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+</main>
+
+<footer>
+    Enterprise SIEM Lab · Python-Based CSV Alert Analysis · Local Demonstration
+    <br><br>
+    This dashboard displays imported data only; it does not connect to a live SIEM.
+</footer>
+
+<script>
+const fileInput = document.getElementById("csvFile");
+const message = document.getElementById("message");
+const alertRows = document.getElementById("alertRows");
+
+let alerts = [];
+
+function parseCSV(text) {
+    const rows = [];
+    let row = [];
+    let field = "";
+    let quoted = false;
+
+    text = text.replace(/^\uFEFF/, "");
+
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+
+        if (ch === '"') {
+            if (quoted && text[i + 1] === '"') {
+                field += '"';
+                i++;
+            } else {
+                quoted = !quoted;
+            }
+        } else if (ch === "," && !quoted) {
+            row.push(field);
+            field = "";
+        } else if ((ch === "\n" || ch === "\r") && !quoted) {
+            if (ch === "\r" && text[i + 1] === "\n") i++;
+            row.push(field);
+
+            if (row.some(value => value.trim() !== "")) {
+                rows.push(row);
+            }
+
+            row = [];
+            field = "";
+        } else {
+            field += ch;
+        }
+    }
+
+    if (field.length || row.length) {
+        row.push(field);
+        if (row.some(value => value.trim() !== "")) {
+            rows.push(row);
+        }
+    }
+
+    if (!rows.length) return [];
+
+    const headers = rows.shift().map(value => value.trim());
+
+    return rows.map(values => {
+        const item = {};
+        headers.forEach((header, index) => {
+            item[header] = (values[index] || "").trim();
+        });
+        return item;
+    });
+}
+
+function getValue(item, names) {
+    for (const name of names) {
+        if (item[name] !== undefined && item[name] !== "") {
+            return item[name];
+        }
+    }
+    return "";
+}
+
+function getSeverity(item) {
+    const direct = getValue(item, ["severity", "Severity"]).toUpperCase();
+
+    if (["CRITICAL", "HIGH", "MEDIUM", "LOW"].includes(direct)) {
+        return direct;
+    }
+
+    const level = Number(getValue(item, ["rule_level", "level", "Rule Level"]));
+
+    if (level >= 12) return "CRITICAL";
+    if (level >= 7) return "HIGH";
+    if (level >= 4) return "MEDIUM";
+    return "LOW";
+}
+
+function normalize(item) {
+    return {
+        timestamp: getValue(item, ["timestamp", "Timestamp", "time"]),
+        severity: getSeverity(item),
+        source: getValue(item, ["source_ip", "src_ip", "Source IP", "src"]),
+        username: getValue(item, ["username", "user", "Username"]),
+        ruleId: getValue(item, ["rule_id", "Rule ID", "ruleid"]),
+        details: getValue(item, ["details", "description", "rule_description", "Details"])
+    };
+}
+
+function safeText(value) {
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function renderAlerts() {
+    document.getElementById("total").textContent = alerts.length;
+    document.getElementById("high").textContent =
+        alerts.filter(a => a.severity === "HIGH").length;
+    document.getElementById("medium").textContent =
+        alerts.filter(a => a.severity === "MEDIUM").length;
+    document.getElementById("critical").textContent =
+        alerts.filter(a => a.severity === "CRITICAL").length;
+
+    if (!alerts.length) {
+        alertRows.innerHTML =
+            '<tr><td colspan="6" class="empty">No alert records to display.</td></tr>';
+        return;
+    }
+
+    alertRows.innerHTML = alerts.map(a => {
+        const severityClass = ["HIGH", "MEDIUM", "CRITICAL"].includes(a.severity)
+            ? a.severity.toLowerCase() : "";
+
+        return `
+            <tr>
+                <td>${safeText(a.timestamp)}</td>
+                <td><span class="severity ${severityClass}">${safeText(a.severity)}</span></td>
+                <td>${safeText(a.source)}</td>
+                <td>${safeText(a.username)}</td>
+                <td>${safeText(a.ruleId)}</td>
+                <td>${safeText(a.details)}</td>
+            </tr>`;
+    }).join("");
+}
+
+document.getElementById("loadBtn").addEventListener("click", () => {
+    const file = fileInput.files[0];
+
+    if (!file) {
+        message.textContent = "Please choose siem_alerts.csv first.";
+        return;
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = () => {
+        try {
+            const parsed = parseCSV(reader.result);
+
+            if (!parsed.length) {
+                alerts = [];
+                renderAlerts();
+                message.textContent = "The selected CSV contains no alert records.";
+                return;
+            }
+
+            alerts = parsed.map(normalize);
+            renderAlerts();
+            message.textContent =
+                `Loaded ${alerts.length} alert records from ${file.name}`;
+        } catch (error) {
+            message.textContent =
+                "Unable to read this CSV. Check that it is a valid CSV file.";
+        }
+    };
+
+    reader.onerror = () => {
+        message.textContent = "Could not read the selected file.";
+    };
+
+    reader.readAsText(file);
+});
+
+document.getElementById("clearBtn").addEventListener("click", () => {
+    alerts = [];
+    fileInput.value = "";
+    renderAlerts();
+    message.textContent = "Results cleared. Select a CSV file to load alerts.";
+});
+
+renderAlerts();
+</script>
+</body>
+</html>

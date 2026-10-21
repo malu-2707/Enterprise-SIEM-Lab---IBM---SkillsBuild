@@ -1,0 +1,9 @@
+timestamp,agent_id,agent_name,manager_name,rule_id,rule_level,rule_description,src_ip,dst_ip,user,status
+2026-10-21T14:22:01Z,001,Ubuntu-Webserver-Prod,Wazuh-Manager-Master,5716,5,SSHD authentication failed.,192.168.1.150,10.0.0.5,root,failed
+2026-10-21T14:22:03Z,001,Ubuntu-Webserver-Prod,Wazuh-Manager-Master,5716,5,SSHD authentication failed.,192.168.1.150,10.0.0.5,admin,failed
+2026-10-21T14:22:05Z,001,Ubuntu-Webserver-Prod,Wazuh-Manager-Master,5720,10,Multiple SSHD authentication failures (Brute Force Attack).,192.168.1.150,10.0.0.5,root,failed
+2026-10-21T14:25:12Z,002,Windows-DC-01,Wazuh-Manager-Master,60118,3,Windows Logon Success Event.,10.0.2.12,10.0.0.2,malini.s,success
+2026-10-21T14:30:45Z,003,Gateway-Firewall,Wazuh-Manager-Worker1,100201,8,Firewall drop event: Inbound connection on stealth port.,203.0.113.42,10.0.0.1,none,dropped
+2026-10-21T14:31:00Z,001,Ubuntu-Webserver-Prod,Wazuh-Manager-Master,5715,3,SSHD authentication success.,10.0.2.5,10.0.0.5,deploy_user,success
+2026-10-21T14:35:22Z,002,Windows-DC-01,Wazuh-Manager-Master,60122,9,Active Directory user account locked out out.,10.0.0.2,10.0.0.2,guest_temp,alert
+2026-10-21T14:40:11Z,001,Ubuntu-Webserver-Prod,Wazuh-Manager-Master,5720,10,Multiple SSHD authentication failures (Brute Force Attack).,198.51.100.77,10.0.0.5,user1,failed

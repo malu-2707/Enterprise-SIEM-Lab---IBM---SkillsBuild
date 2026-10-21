@@ -1,0 +1,3 @@
+timestamp,severity,source_ip,destination_ip,username,rule_id,rule_level,agent_name,event_type,status,details
+2026-10-21T14:22:05Z,HIGH,192.168.1.150,10.0.0.5,root,5720,10,Ubuntu-Webserver-Prod,Multiple SSHD authentication failures (Brute Force Attack).,failed,Wazuh rule level is 10 or higher | Multiple SSHD authentication failures (Brute Force Attack).
+2026-10-21T14:40:11Z,HIGH,198.51.100.77,10.0.0.5,user1,5720,10,Ubuntu-Webserver-Prod,Multiple SSHD authentication failures (Brute Force Attack).,failed,Wazuh rule level is 10 or higher | Multiple SSHD authentication failures (Brute Force Attack).
